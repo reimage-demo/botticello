@@ -1,0 +1,24 @@
+{
+  "tool": "Built-in image_gen image editor",
+  "transparent_background": true,
+  "outputs": [
+    {
+      "asset": "service-bays",
+      "source": "service-bays-1200.webp",
+      "prompt": "Use case: background-extraction. Edit target: the attached real photograph of Botticello Auto Repair service bays. Create a clean photographic cutout of the existing brick garage building, including its roof edge, brick facade, garage doors, yellow business sign and mounted fixtures. Remove the blue sky, distant trees and utilities, asphalt pavement and shadows, and foreground vehicles/equipment, replacing all non-building regions with genuine alpha transparency. Preserve the actual building's perspective, photographic texture, proportions, lighting, and all existing sign text exactly. Do not redesign, redraw, stylize, embellish, or invent architecture or signage. Retain the source crop where the building extends out of frame; do not invent missing sides. Follow the real roofline, facade side and building base with clean edges, no halo or artificial shadows. Output only the isolated building on a transparent background, suitable for a charcoal website hero.",
+      "files": [
+        "service-bays-cutout-640.webp",
+        "service-bays-cutout-1200.webp"
+      ]
+    },
+    {
+      "asset": "entrance",
+      "source": "entrance-1200.webp",
+      "prompt": "Use case: background-extraction. Edit target: the attached real photograph of Botticello Auto Repair's brick entrance. Create a clean photographic cutout of the existing storefront facade, keeping the slanted roofline, bricks, yellow Botticello sign, fixtures, glass window with its original signs, and entrance door. Remove the blue sky, outside trees, pavement and the foreground partial car at lower left, replacing non-building regions with genuine alpha transparency. Preserve the actual building's camera perspective, colors, photographic texture, proportions and all existing signs and lettering exactly. Reflections inside existing glass remain part of the building. Do not redesign, invent architecture, stylize, alter logos or typography, or make the building look newly renovated. Retain the source crop where the building extends beyond frame. Clean precise edges following roofline, right edge and facade base, no halos, glows or added shadows. Output only this isolated real facade on a transparent background for use on a charcoal website hero.",
+      "files": [
+        "entrance-cutout-640.webp",
+        "entrance-cutout-1200.webp"
+      ]
+    }
+  ]
+}

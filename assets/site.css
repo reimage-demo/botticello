@@ -1269,7 +1269,8 @@ fieldset {
   object-position: 50% 58%;
 }
 .hero-photo-right {
-  object-position: 50% 38%;
+  object-fit: contain;
+  object-position: center;
 }
 @media (max-width: 1100px) {
   .hero .wrap {

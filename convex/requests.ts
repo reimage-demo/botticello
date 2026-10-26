@@ -30,6 +30,30 @@ export const start = mutation({
     bounded(args.service, "Service", 100);
     if (args.description.length > 4000)
       throw new Error("Description is too long.");
+    for (const [label, value, max] of [
+      ["Year", args.vehicleYear, 4],
+      ["Make", args.vehicleMake, 60],
+      ["Model", args.vehicleModel, 80],
+      ["Mileage", args.mileage, 12],
+      ["Issue area", args.issueArea, 100],
+      ["Issue type", args.issueType, 100],
+      ["Severity", args.severity, 40],
+    ] as const) {
+      if (value) bounded(value, label, max);
+    }
+    if (
+      args.vehicleYear &&
+      (!/^\d{4}$/.test(args.vehicleYear) ||
+        Number(args.vehicleYear) < 1900 ||
+        Number(args.vehicleYear) > new Date().getFullYear() + 2)
+    )
+      throw new Error("Enter a valid vehicle year.");
+    if (args.vin && !/^[A-HJ-NPR-Z0-9]{17}$/.test(args.vin))
+      throw new Error(
+        "VIN must contain 17 letters and numbers, excluding I, O, and Q.",
+      );
+    if (args.mileage && !/^\d{1,9}$/.test(args.mileage))
+      throw new Error("Enter a valid mileage.");
     const recent = await ctx.db
       .query("requests")
       .withIndex("by_email", (q) => q.eq("email", email))

@@ -24,6 +24,17 @@ export const requestFields = {
   duty: v.union(v.literal("light"), v.literal("medium"), v.literal("heavy")),
   service: v.string(),
   description: v.string(),
+  vehicleYear: v.optional(v.string()),
+  vehicleMake: v.optional(v.string()),
+  vehicleModel: v.optional(v.string()),
+  vin: v.optional(v.string()),
+  mileage: v.optional(v.string()),
+  issueArea: v.optional(v.string()),
+  issueType: v.optional(v.string()),
+  severity: v.optional(v.string()),
+  preferredContactMethod: v.optional(
+    v.union(v.literal("phone"), v.literal("text"), v.literal("email")),
+  ),
   preferredDate: v.optional(v.string()),
   preferredTime: v.optional(v.string()),
 };

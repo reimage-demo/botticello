@@ -162,3 +162,42 @@ describe("shop access and workflow", () => {
     expect(await t.query(api.inventory.available, {})).toHaveLength(0);
   });
 });
+
+describe("detailed online estimates", () => {
+  it("retains vehicle and issue details through finalization for the admin", async () => {
+    const t = convexTest(schema, modules),
+      staff = await admin(t);
+    const details = {
+      vehicleYear: "2018",
+      vehicleMake: "Ford",
+      vehicleModel: "F-150",
+      vin: "1FTFW1EF1EFA00001",
+      mileage: "65000",
+      issueArea: "Front of vehicle",
+      issueType: "Unusual noise",
+      severity: "Still driving, but there is a concern",
+      preferredContactMethod: "email" as const,
+    };
+    const id = await t.mutation(api.requests.start, { ...payload, ...details });
+    await t.mutation(api.requests.finish, {
+      id,
+      submissionKey: payload.submissionKey,
+    });
+    expect((await staff.query(api.requests.list, {}))[0]).toMatchObject(
+      details,
+    );
+  });
+  it("rejects malformed VINs, model years, and mileage", async () => {
+    const t = convexTest(schema, modules);
+    for (const vin of ["123", "1FTFW1EF1EFA0000I", "1FTFW1EF1EFA0000O"])
+      await expect(
+        t.mutation(api.requests.start, { ...payload, vin }),
+      ).rejects.toThrow("VIN");
+    await expect(
+      t.mutation(api.requests.start, { ...payload, vehicleYear: "1800" }),
+    ).rejects.toThrow("year");
+    await expect(
+      t.mutation(api.requests.start, { ...payload, mileage: "-100" }),
+    ).rejects.toThrow("mileage");
+  });
+});

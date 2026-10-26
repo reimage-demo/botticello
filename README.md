@@ -39,4 +39,6 @@ Name, address, phone, weekday hours, family ownership, and Spanish-language serv
 
 The website now uses user-supplied shop photographs in `assets/photos/`. Images are supplied at 640 px and 1200 px widths as WebP, without original EXIF/GPS metadata. Original HEIC files remain unchanged in Downloads. Photo mapping: service bays = IMG_2133; entrance = IMG_2131; roadside sign = IMG_2132; reception = IMG_2130. The remaining four supplied photos were reviewed but are not published on the site. Visible signs are photographic content; posted rates and policies were not adopted as website instructions or estimator pricing.
 
-The DoorDash reference screenshot has not yet been supplied, so its requested design treatment remains pending.
+The brand logo is the original high-resolution Discover asset from `re-image website/output/discover-20261023/botticello-auto-repair-2026.png`. The current design follows the user’s later editorial direction: solid colors, rectangular photography, compact spacing, and no decorative effects.
+
+The homepage includes Eastern-time shop status, a seven-day hours table, and the same four-step estimate form as `estimate.html`. Optional VIN, mileage, issue details, and photos reach the existing Convex request workflow and admin detail view. Existing appointment requests remain compatible. Five independently sourced Google review excerpts are documented in [REVIEW-SOURCES.md](REVIEW-SOURCES.md).

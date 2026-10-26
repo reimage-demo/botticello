@@ -188,7 +188,7 @@ form.addEventListener("submit", async (e) => {
     form.hidden = true;
     document.querySelector(".progress").hidden = true;
     const done = document.querySelector("#success");
-    done.innerHTML = `<p class="eyebrow">REQUEST ${text(result.reference)}</p><h2>You’re on our radar.</h2><p>Your request has reached the shop. We’ll contact you using the details you provided.</p><p>${form.dataset.kind === "appointment" ? "Your appointment is not confirmed yet. Please wait for confirmation from our team." : "Our team will review the details and discuss pricing and any inspection needed."}</p><a class="btn" href="index.html">Back to home ↗</a>`;
+    done.innerHTML = `<p>Request reference: ${text(result.reference)}</p><h2>Your request has reached the shop.</h2><p>We’ll contact you using the details you provided.</p><p>${form.dataset.kind === "appointment" ? "Your appointment is not confirmed yet. Please wait for confirmation from our team." : "Our team will review the details and discuss pricing and any inspection needed."}</p><a class="btn" href="index.html">Back to home</a>`;
     done.hidden = false;
     done.focus();
   } catch (err) {
@@ -201,6 +201,6 @@ form.addEventListener("submit", async (e) => {
     busy = false;
     submit.disabled = false;
     back.disabled = false;
-    submit.textContent = "Send request ↗";
+    submit.textContent = "Send request";
   }
 });

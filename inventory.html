@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Browse vehicles listed for sale by Botticello Auto Repair in West Hartford."
+    />
+    <meta name="theme-color" content="#171717" />
+    <title>Cars for sale | Botticello Auto Repair</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <div data-header></div>
+    <main id="main">
+      <section class="pagehead">
+        <div class="wrap">
+          <p class="eyebrow">YOUR NEXT SET OF KEYS</p>
+          <h1>A new chapter.<br />A different ride.</h1>
+          <p>
+            Browse the vehicles currently listed by our shop. Call for
+            availability or to arrange a closer look.
+          </p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="wrap">
+          <div class="filters">
+            <label
+              >Search inventory<input
+                type="search"
+                id="search"
+                placeholder="Make, model, or year" /></label
+            ><label
+              >Sort by<select id="sort">
+                <option value="newest">Recently added</option>
+                <option value="price-low">Price: low to high</option>
+                <option value="price-high">Price: high to low</option>
+              </select></label
+            >
+            <p id="count" aria-live="polite"></p>
+          </div>
+          <div class="inventory-grid" id="inventory" aria-live="polite">
+            <p>Loading available vehicles…</p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div data-footer></div>
+    <script type="module" src="/assets/site.js"></script>
+    <script type="module" src="/assets/inventory.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+import { defineConfig } from "vite";
+import { resolve } from "node:path";
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      input: Object.fromEntries(
+        [
+          "index",
+          "services",
+          "estimate",
+          "appointments",
+          "inventory",
+          "contact",
+          "privacy",
+        ].map((p) => [p, resolve(import.meta.dirname, `${p}.html`)]),
+      ),
+    },
+  },
+});

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Tell us about your vehicle and the work it needs. Our team will review your request and follow up with you."
+    />
+    <meta name="theme-color" content="#171717" />
+    <title>Request an estimate | Botticello Auto Repair</title>
+    <link rel="stylesheet" href="/assets/site.css" />
+  </head>
+  <body>
+    <div data-header></div>
+    <main id="main">
+      <section class="pagehead">
+        <div class="wrap">
+          <p class="eyebrow">A GOOD PLACE TO START</p>
+          <h1>Let’s get you<br />an estimate.</h1>
+          <p>
+            Tell us about your vehicle and the work it needs. Our team will
+            review your request and follow up with you.
+          </p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="wrap form-layout">
+          <div>
+            <div class="progress" aria-label="Form progress">
+              <span class="active">01 / Vehicle</span><span>02 / Contact</span
+              ><span>03 / Review</span>
+            </div>
+            <form id="request-form" data-kind="estimate">
+              <div class="hp" aria-hidden="true">
+                <label
+                  >Website<input
+                    name="website"
+                    tabindex="-1"
+                    autocomplete="off"
+                /></label>
+              </div>
+              <fieldset data-step="0">
+                <legend>What are you driving?</legend>
+                <div class="form-grid">
+                  <label class="full"
+                    >Year, make & model<input
+                      name="vehicle"
+                      maxlength="150"
+                      placeholder="e.g. 2018 Ford F-150"
+                      required
+                      autocomplete="off" /></label
+                  ><label
+                    >Vehicle class<select name="duty">
+                      <option value="light">
+                        Light duty · car, SUV, pickup
+                      </option>
+                      <option value="medium">
+                        Medium duty · work van, truck
+                      </option>
+                      <option value="heavy">
+                        Heavy duty · commercial truck
+                      </option>
+                    </select></label
+                  ><label
+                    >What can we help with?<select name="service" required>
+                      <option value="">Select a service</option>
+                      <option>Maintenance</option>
+                      <option>Diagnostics</option>
+                      <option>Brakes</option>
+                      <option>Tires & suspension</option>
+                      <option>Engine</option>
+                      <option>Transmission</option>
+                      <option>Other / not sure</option>
+                    </select></label
+                  ><label class="full"
+                    >Tell us what’s going on<textarea
+                      name="description"
+                      maxlength="4000"
+                      placeholder="What have you noticed? When does it happen?"
+                    ></textarea></label
+                  ><label class="full"
+                    >Photos (optional)<input
+                      type="file"
+                      id="photos"
+                      accept="image/jpeg,image/png,image/webp"
+                      multiple
+                    /><small
+                      >Up to 6 photos. JPEG, PNG, or WebP. Maximum 8 MB
+                      each.</small
+                    ></label
+                  >
+                  <div class="photo-previews full" id="photo-previews"></div>
+                </div>
+              </fieldset>
+              <fieldset data-step="1" hidden>
+                <legend>How can we reach you?</legend>
+                <div class="form-grid">
+                  <label class="full"
+                    >Full name<input
+                      name="name"
+                      autocomplete="name"
+                      maxlength="100"
+                      required /></label
+                  ><label
+                    >Email<input
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      maxlength="200"
+                      required /></label
+                  ><label
+                    >Phone number<input
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      maxlength="30"
+                      required /></label
+                  ><label class="check full"
+                    ><input name="consent" type="checkbox" required /><span
+                      >I agree that Botticello Auto Repair may contact me about
+                      this request. I have read the
+                      <a href="privacy.html" target="_blank">privacy notice</a
+                      >.</span
+                    ></label
+                  >
+                </div>
+              </fieldset>
+              <fieldset data-step="2" hidden>
+                <legend>Everything look right?</legend>
+                <div class="review" id="review"></div>
+                <p class="hint" style="margin-top: 18px">
+                  This is a request for an estimate. Pricing is provided by the
+                  shop and may require inspection.
+                </p>
+              </fieldset>
+              <div id="form-error" class="error" role="alert" hidden></div>
+              <div class="form-actions">
+                <button type="button" class="btn outline" id="back" hidden>
+                  ← Back</button
+                ><button type="button" class="btn" id="next">
+                  Continue <span>→</span></button
+                ><button type="submit" class="btn" id="submit" hidden>
+                  Send request <span>↗</span>
+                </button>
+              </div>
+            </form>
+            <div id="success" class="success" tabindex="-1" hidden></div>
+          </div>
+          <aside class="form-aside">
+            <p class="eyebrow">REAL PEOPLE. REAL ANSWERS.</p>
+            <h3>A little detail.<br />A better starting point.</h3>
+            <p>
+              Share the symptoms, any dashboard warning lights, and the work you
+              have in mind.
+            </p>
+            <p>Prefer to talk it through?</p>
+            <a href="tel:+18609535622">860-953-5622 ↗</a>
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 24px 0" />
+            <p>
+              Monday–Friday<br />8:00 a.m.–5:00 p.m.<br /><br />210 South
+              Street<br />West Hartford, CT 06110
+            </p>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <div data-footer></div>
+    <script type="module" src="/assets/site.js"></script>
+    <script type="module" src="/assets/request.js"></script>
+  </body>
+</html>

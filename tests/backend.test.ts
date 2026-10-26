@@ -177,6 +177,8 @@ describe("detailed online estimates", () => {
       issueType: "Unusual noise",
       severity: "Still driving, but there is a concern",
       preferredContactMethod: "email" as const,
+      needsTow: true,
+      needsRental: false,
     };
     const id = await t.mutation(api.requests.start, { ...payload, ...details });
     await t.mutation(api.requests.finish, {

@@ -64,6 +64,48 @@ describe("estimate form in the browser DOM", () => {
     );
     expect(call).not.toHaveBeenCalled();
   });
+  it.each([
+    [false, false],
+    [true, false],
+    [false, true],
+    [true, true],
+  ])(
+    "includes tow=%s and rental=%s in the review and submission",
+    async (needsTow, needsRental) => {
+      toReview();
+      click("estimate-back");
+      expect(field("needsTow").checked).toBe(false);
+      expect(field("needsRental").checked).toBe(false);
+      field("needsTow").checked = needsTow;
+      field("needsRental").checked = needsRental;
+      click("estimate-next");
+      const summary = document.querySelector("#estimate-summary")!;
+      const rows = Object.fromEntries(
+        [...summary.querySelectorAll("dt")].map((dt) => [
+          dt.textContent,
+          dt.nextElementSibling?.textContent,
+        ]),
+      );
+      expect(rows["Tow needed"]).toBe(needsTow ? "Yes" : "No");
+      expect(rows["Rental needed"]).toBe(needsRental ? "Yes" : "No");
+      click("estimate-back");
+      expect(field("needsTow").checked).toBe(needsTow);
+      expect(field("needsRental").checked).toBe(needsRental);
+      click("estimate-next");
+      call.mockImplementation(async (_kind, fn) =>
+        fn === "requests:start" ? "request-123" : { reference: "ABC123" },
+      );
+      click("estimate-send");
+      await vi.waitFor(() =>
+        expect(
+          document.getElementById("estimate-success")?.textContent,
+        ).toContain("ABC123"),
+      );
+      expect(
+        call.mock.calls.find((c) => c[1] === "requests:start")?.[2],
+      ).toMatchObject({ needsTow, needsRental });
+    },
+  );
   it("allows adding and removing photos before submission", () => {
     toReview();
     const input = document.getElementById(
@@ -97,12 +139,10 @@ describe("estimate form in the browser DOM", () => {
         throw Error("Temporary connection failure");
       if (fn === "requests:finish") return { reference: "ABC123" };
     });
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue({
-        ok: true,
-        json: async () => ({ storageId: "photo-123" }),
-      });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ storageId: "photo-123" }),
+    });
     vi.stubGlobal("fetch", fetchMock);
     click("estimate-send");
     await vi.waitFor(() =>

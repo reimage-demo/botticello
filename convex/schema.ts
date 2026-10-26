@@ -32,6 +32,8 @@ export const requestFields = {
   issueArea: v.optional(v.string()),
   issueType: v.optional(v.string()),
   severity: v.optional(v.string()),
+  needsTow: v.optional(v.boolean()),
+  needsRental: v.optional(v.boolean()),
   preferredContactMethod: v.optional(
     v.union(v.literal("phone"), v.literal("text"), v.literal("email")),
   ),

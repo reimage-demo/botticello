@@ -904,3 +904,86 @@ button:disabled {
     transition: none !important;
   }
 }
+
+/* User-supplied shop photography; preserve the monochrome public design. */
+.hero-visual .bays-photo {
+  object-position: 50% 65%;
+}
+.visit .entrance-photo {
+  object-position: 50% 35%;
+}
+.service-photo {
+  margin: 0 0 36px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #171717;
+}
+.service-photo img {
+  width: 100%;
+  height: 380px;
+  object-fit: cover;
+  object-position: 50% 54%;
+  filter: grayscale(1);
+}
+.service-photo figcaption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 40px 24px 22px;
+  background: linear-gradient(transparent, #000b);
+  color: white;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+}
+.shop-tour {
+  background: var(--soft);
+}
+.shop-photo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+.shop-photo-grid figure {
+  margin: 0;
+  min-width: 0;
+}
+.shop-photo-grid img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  object-position: 50% 65%;
+  filter: grayscale(1);
+  border-radius: 6px;
+}
+.shop-photo-grid figcaption {
+  padding-top: 24px;
+}
+.shop-photo-grid figcaption span {
+  font-size: 10px;
+  letter-spacing: 0.13em;
+  color: var(--muted);
+}
+.shop-photo-grid h3 {
+  margin: 14px 0 10px;
+}
+.shop-photo-grid p {
+  color: var(--muted);
+  font-size: 13px;
+}
+@media (max-width: 720px) {
+  .service-photo img {
+    height: 280px;
+  }
+  .service-photo figcaption {
+    font-size: 8px;
+  }
+  .shop-photo-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .shop-photo-grid img {
+    height: 340px;
+  }
+}

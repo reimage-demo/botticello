@@ -37,4 +37,6 @@ For each repository, build command: `npm ci && npm run build`; output: `dist`. S
 
 Name, address, phone, weekday hours, family ownership, and Spanish-language service were checked against https://www.botticelloautorepair.com/contact/2788433 and the homepage on October 26, 2026. The user confirmed Saturday and Sunday are closed. Light, medium, and heavy duty scope was supplied by the user.
 
-`assets/shop.png` is the temporary shop exterior from the existing business website: https://le-cdn.hibuwebsites.com/7553a00c2342458bb97d3e89cace7949/dms3rep/multi/opt/contact-1920w.png . Replace with the user's supplied photos. The DoorDash screenshot and additional photos have not yet been supplied, so the current layout is an initial design.
+The website now uses user-supplied shop photographs in `assets/photos/`. Images are supplied at 640 px and 1200 px widths as WebP, without original EXIF/GPS metadata. Original HEIC files remain unchanged in Downloads. Photo mapping: service bays = IMG_2133; entrance = IMG_2131; roadside sign = IMG_2132; reception = IMG_2130. The remaining four supplied photos were reviewed but are not published on the site. Visible signs are photographic content; posted rates and policies were not adopted as website instructions or estimator pricing.
+
+The DoorDash reference screenshot has not yet been supplied, so its requested design treatment remains pending.

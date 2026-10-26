@@ -1215,39 +1215,44 @@ fieldset {
   }
 }
 
+/* The logo, navigation, and shop photography render from plain HTML. */
 .hero .wrap {
+  max-width: 1600px;
   min-height: 550px;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(480px, 2.25fr) minmax(
+      180px,
+      1fr
+    );
   align-items: center;
-  padding-block: 96px;
+  gap: 40px;
+  padding-block: 72px;
 }
 .hero-copy {
-  max-width: 800px;
   text-align: center;
 }
 .hero h1 {
-  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  font-size: clamp(2.8rem, 4.2vw, 4.25rem);
   line-height: 1.08;
   margin: 0 auto 28px;
   font-weight: 750;
 }
 .hero-copy > p {
-  max-width: 550px;
+  max-width: 510px;
   margin: 0 auto;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1.7;
   color: #dedede;
 }
 .hero .actions {
   justify-content: center;
-  gap: 16px;
-  margin-top: 36px;
+  gap: 12px;
+  margin-top: 32px;
 }
 .hero .btn {
   min-height: 54px;
-  padding-inline: 30px;
-  font-size: 15px;
+  padding-inline: 24px;
+  font-size: 14px;
 }
 .hero .btn.outline {
   border-color: #797979;
@@ -1255,10 +1260,39 @@ fieldset {
 .hero .btn.outline:hover {
   border-color: #fff;
 }
+.hero-photo {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+}
+.hero-photo-left {
+  object-position: 50% 58%;
+}
+.hero-photo-right {
+  object-position: 50% 38%;
+}
+@media (max-width: 1100px) {
+  .hero .wrap {
+    max-width: 800px;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    padding-block: 56px;
+  }
+  .hero-copy {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 6vw, 4rem);
+  }
+  .hero-photo {
+    height: 230px;
+  }
+}
 @media (max-width: 720px) {
   .hero .wrap {
-    min-height: 480px;
-    padding-block: 72px;
+    gap: 24px 16px;
+    padding-block: 48px 32px;
   }
   .hero h1 {
     font-size: clamp(2.55rem, 9vw, 3.8rem);
@@ -1269,24 +1303,26 @@ fieldset {
   }
   .hero .actions {
     gap: 12px;
-    margin-top: 32px;
+    margin-top: 28px;
   }
   .hero .btn {
     padding-inline: 24px;
+  }
+  .hero-photo {
+    height: 200px;
   }
   .estimate-layout {
     gap: 36px;
   }
 }
 @media (max-width: 440px) {
-  .hero .wrap {
-    min-height: 510px;
-    padding-block: 64px;
-  }
   .hero .actions {
     flex-direction: column;
   }
   .hero .btn {
     width: min(100%, 290px);
+  }
+  .hero-photo {
+    height: 160px;
   }
 }

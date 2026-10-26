@@ -12,10 +12,54 @@
     <link rel="stylesheet" href="/assets/site.css" />
   </head>
   <body>
-    <div data-header></div>
+    <div data-header>
+      <a href="#main" class="skip">Skip to content</a>
+      <header>
+        <div class="nav wrap">
+          <a
+            class="brand-link"
+            href="index.html"
+            aria-label="Botticello Auto Repair home"
+            ><img
+              src="/assets/branding/botticello-logo.webp"
+              width="1000"
+              height="334"
+              alt="Botticello Auto Repair"
+          /></a>
+          <nav class="navlinks" id="navigation" aria-label="Main navigation">
+            <a href="services.html">Services</a
+            ><a href="inventory.html">Cars for sale</a
+            ><a href="contact.html">Visit the shop</a
+            ><a href="index.html#estimate">Online estimate</a>
+          </nav>
+          <a class="btn small" href="appointments.html">Book an appointment</a
+          ><button
+            class="menu"
+            aria-controls="navigation"
+            aria-expanded="false"
+          >
+            Menu
+          </button>
+        </div>
+      </header>
+    </div>
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
         <div class="wrap">
+          <img
+            class="hero-photo hero-photo-left"
+            src="/assets/photos/service-bays-640.webp"
+            srcset="
+              /assets/photos/service-bays-640.webp   640w,
+              /assets/photos/service-bays-1200.webp 1200w
+            "
+            sizes="(max-width: 720px) 44vw, (max-width: 1100px) 38vw, 300px"
+            width="640"
+            height="853"
+            alt="Botticello Auto Repair service bays"
+            decoding="async"
+            fetchpriority="high"
+          />
           <div class="hero-copy">
             <h1 id="hero-title">Auto repair in<br />West Hartford.</h1>
             <p>
@@ -31,6 +75,20 @@
               >
             </div>
           </div>
+          <img
+            class="hero-photo hero-photo-right"
+            src="/assets/photos/entrance-640.webp"
+            srcset="
+              /assets/photos/entrance-640.webp   640w,
+              /assets/photos/entrance-1200.webp 1200w
+            "
+            sizes="(max-width: 720px) 44vw, (max-width: 1100px) 38vw, 300px"
+            width="640"
+            height="853"
+            alt="The Botticello Auto Repair entrance on South Street"
+            decoding="async"
+            fetchpriority="high"
+          />
         </div>
       </section>
       <section class="visit-details" aria-labelledby="visit-title">
@@ -290,7 +348,37 @@
         </div>
       </section>
     </main>
-    <div data-footer></div>
+    <div data-footer>
+      <footer>
+        <div class="wrap">
+          <div class="footer-top">
+            <a
+              class="brand-link"
+              href="index.html"
+              aria-label="Botticello Auto Repair home"
+              ><img
+                src="/assets/branding/botticello-logo.webp"
+                width="1000"
+                height="334"
+                alt="Botticello Auto Repair"
+            /></a>
+            <nav aria-label="Footer">
+              <a href="services.html">Services</a
+              ><a href="appointments.html">Book an appointment</a
+              ><a href="estimate.html">Online estimate</a
+              ><a href="inventory.html">Cars for sale</a
+              ><a href="contact.html">Contact</a>
+            </nav>
+          </div>
+          <div class="footer-bottom">
+            <span
+              >© <span data-year>2026</span> Botticello Auto Repair. 210 South
+              Street, West Hartford, CT 06110</span
+            ><a href="privacy.html">Privacy</a>
+          </div>
+        </div>
+      </footer>
+    </div>
     <script type="module" src="/assets/site.js"></script>
     <script type="module" src="/assets/estimate-form.js"></script>
   </body>

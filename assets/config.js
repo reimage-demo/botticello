@@ -1,4 +1,5 @@
-export const CONVEX_URL = import.meta.env.VITE_CONVEX_URL || "";
+export const CONVEX_URL =
+  import.meta.env?.VITE_CONVEX_URL || "https://sincere-turtle-299.convex.cloud";
 export async function call(kind, path, args = {}) {
   if (!CONVEX_URL.startsWith("https://"))
     throw new Error(

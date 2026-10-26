@@ -10,7 +10,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Public preview: http://127.0.0.1:5174. `npm run build` produces `dist/` for static hosting. No React is used in the public pages. Vite bundles vanilla JavaScript and the public Convex URL.
+Public preview: http://127.0.0.1:5174. The root HTML also works directly with VS Code Live Server (for example, http://127.0.0.1:5500/index.html). Navigation, logos, and photos are in the HTML; browser-native ES modules enhance the page. The public Convex URL defaults to this shop’s production deployment, with an optional Vite environment override. `npm run build` produces `dist/` for static hosting. No React is used in the public pages. Vite bundles vanilla JavaScript and the public Convex URL.
 
 ## Production Convex
 
@@ -39,6 +39,6 @@ Name, address, phone, weekday hours, family ownership, and Spanish-language serv
 
 The website now uses user-supplied shop photographs in `assets/photos/`. Images are supplied at 640 px and 1200 px widths as WebP, without original EXIF/GPS metadata. Original HEIC files remain unchanged in Downloads. Photo mapping: service bays = IMG_2133; entrance = IMG_2131; roadside sign = IMG_2132; reception = IMG_2130. The remaining four supplied photos were reviewed but are not published on the site. Visible signs are photographic content; posted rates and policies were not adopted as website instructions or estimator pricing.
 
-The brand logo is the original high-resolution Discover asset from `re-image website/output/discover-20261023/botticello-auto-repair-2026.png`. The current design follows the supplied DoorDash reference with a single solid charcoal hero, centered headline and calls to action, rounded buttons, and Inter typography. The rest of the site keeps clear alignment, generous spacing, real photography, and no decorative effects. Form stages use descriptive labels without visible numbers.
+The brand logo is the original high-resolution Discover asset from `re-image website/output/discover-20261023/botticello-auto-repair-2026.png`. The current design follows the supplied DoorDash reference with a single solid charcoal hero, real shop photos framing the centered headline and calls to action, rounded buttons, and Inter typography. The rest of the site keeps clear alignment, generous spacing, real photography, and no decorative effects. Form stages use descriptive labels without visible numbers.
 
 The homepage includes Eastern-time shop status, a seven-day hours table, and the same four-step estimate form as `estimate.html`. Optional VIN, mileage, issue details, and photos reach the existing Convex request workflow and admin detail view. Existing appointment requests remain compatible. Five independently sourced Google review excerpts are documented in [REVIEW-SOURCES.md](REVIEW-SOURCES.md).

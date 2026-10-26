@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 :root {
   --ink: #171717;
   --paper: #fff;
   --soft: #f3f3f0;
   --line: #d5d5d0;
   --muted: #5b5b56;
-  font-family: "DM Sans", Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   color: var(--ink);
   background: var(--paper);
   font-synthesis: none;
@@ -50,25 +50,28 @@ h1,
 h2,
 h3,
 legend {
-  font-family: "Barlow Condensed", "Arial Narrow", Arial, sans-serif;
+  font-family: "Inter", Arial, sans-serif;
   font-weight: 600;
 }
 h1,
 h2 {
-  line-height: 1.02;
-  letter-spacing: -0.015em;
+  font-size: clamp(1.85rem, 3vw, 2.75rem);
+  margin-bottom: 24px;
+  font-weight: 700;
 }
 h1 {
-  font-size: clamp(3.5rem, 6.5vw, 6.4rem);
+  font-size: clamp(2.5rem, 4.6vw, 4.5rem);
   margin-bottom: 24px;
+  font-weight: 700;
 }
 h2 {
   font-size: clamp(2.5rem, 4vw, 4rem);
   margin-bottom: 24px;
 }
 h3 {
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
   margin-bottom: 12px;
 }
 a:focus-visible,
@@ -139,9 +142,9 @@ header {
   border: 1px solid var(--ink);
   background: var(--ink);
   color: #fff;
-  border-radius: 2px;
-  padding: 15px 21px;
-  min-height: 46px;
+  border-radius: 999px;
+  padding: 16px 26px;
+  min-height: 50px;
   font-size: 14px;
   line-height: 1.3;
   font-weight: 600;
@@ -177,8 +180,9 @@ header {
   display: none;
   border: 1px solid var(--line);
   background: #fff;
-  padding: 12px;
+  padding: 12px 16px;
   min-height: 44px;
+  border-radius: 999px;
 }
 .actions {
   display: flex;
@@ -195,38 +199,7 @@ header {
   background: var(--ink);
   color: #fff;
 }
-.hero .wrap {
-  display: grid;
-  grid-template-columns: 1.04fr 1fr;
-  gap: 56px;
-  align-items: center;
-  padding-block: 42px;
-}
-.hero-copy {
-  padding-block: 12px;
-}
-.hero .location-line {
-  font-size: 13px;
-  color: #d6d6d0;
-  margin-bottom: 24px;
-}
-.hero-copy > p:not(.location-line) {
-  font-size: 16px;
-  max-width: 425px;
-  color: #d6d6d0;
-}
-.hero h1 {
-  max-width: 600px;
-}
-.hero-visual img {
-  width: 100%;
-  height: 464px;
-  object-fit: cover;
-  object-position: 50% 60%;
-}
-.hero .text-link {
-  color: #fff;
-}
+
 .visit-details {
   border-bottom: 1px solid var(--line);
 }
@@ -234,7 +207,7 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 100px;
-  padding-block: 40px;
+  padding-block: 56px;
 }
 .visit-address h2 {
   font-size: 2rem;
@@ -295,7 +268,7 @@ header {
   font-weight: 700;
 }
 .section {
-  padding-block: 64px;
+  padding-block: 80px;
 }
 .soft,
 .estimate-section {
@@ -340,7 +313,7 @@ header {
   text-underline-offset: 5px;
 }
 .service-card h3 {
-  font-size: 28px;
+  font-size: 22px;
   margin: 0;
 }
 .service-card p {
@@ -467,7 +440,7 @@ header {
   max-width: 320px;
 }
 .estimate-intro h2 {
-  font-size: clamp(2.4rem, 3.8vw, 3.7rem);
+  font-size: clamp(1.85rem, 3vw, 2.75rem);
 }
 #estimate {
   scroll-margin-top: 24px;
@@ -527,7 +500,7 @@ fieldset {
   min-width: 0;
 }
 legend {
-  font-size: 28px;
+  font-size: 22px;
   margin-bottom: 16px;
   padding: 0;
 }
@@ -696,7 +669,7 @@ button:disabled {
   border-bottom: 1px solid var(--line);
 }
 .pagehead h1 {
-  font-size: clamp(3rem, 5.4vw, 5.2rem);
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
 }
 .pagehead p {
   max-width: 580px;
@@ -741,7 +714,7 @@ button:disabled {
   padding: 24px;
 }
 .vehicle h3 {
-  font-size: 28px;
+  font-size: 22px;
 }
 .vehicle strong {
   display: block;
@@ -855,7 +828,7 @@ button:disabled {
   max-width: 850px;
 }
 .privacy h2 {
-  font-size: 32px;
+  font-size: 26px;
   margin-top: 32px;
 }
 .privacy p {
@@ -917,12 +890,7 @@ footer nav {
     gap: 16px;
     font-size: 12px;
   }
-  .hero .wrap {
-    gap: 32px;
-  }
-  .hero-visual img {
-    height: 440px;
-  }
+
   .estimate-layout {
     gap: 48px;
   }
@@ -981,12 +949,7 @@ footer nav {
     grid-template-columns: 1fr 1.6fr;
     gap: 32px;
   }
-  .hero .actions {
-    gap: 18px;
-  }
-  .hero-visual img {
-    height: 460px;
-  }
+
   .shop-story-grid > figure img {
     height: 540px;
   }
@@ -1027,30 +990,7 @@ footer nav {
     font-size: 12px;
     padding: 10px;
   }
-  .hero .wrap {
-    grid-template-columns: 1fr;
-    gap: 28px;
-    padding-block: 32px;
-  }
-  .hero h1 {
-    font-size: clamp(3.7rem, 12vw, 5.2rem);
-  }
-  .hero-copy {
-    padding: 0;
-  }
-  .hero .location-line {
-    margin-bottom: 20px;
-  }
-  .hero-copy > p:not(.location-line) {
-    font-size: 15px;
-  }
-  .hero-visual img {
-    height: 300px;
-    object-position: 50% 60%;
-  }
-  .hero .actions {
-    gap: 20px;
-  }
+
   .visit-grid {
     grid-template-columns: 1fr 1fr;
     gap: 24px;
@@ -1060,7 +1000,7 @@ footer nav {
     font-size: 16px;
   }
   .visit-address h2 {
-    font-size: 28px;
+    font-size: 22px;
   }
   .phone-link {
     font-size: 19px;
@@ -1082,7 +1022,7 @@ footer nav {
     padding-block: 9px;
   }
   .section {
-    padding-block: 44px;
+    padding-block: 56px;
   }
   .section-head {
     display: block;
@@ -1098,7 +1038,7 @@ footer nav {
   }
   .service-card h3 {
     grid-row: auto;
-    font-size: 28px;
+    font-size: 22px;
   }
   .service-action {
     grid-column: 1;
@@ -1180,7 +1120,7 @@ footer nav {
     padding-block: 32px;
   }
   .pagehead h1 {
-    font-size: 3.4rem;
+    font-size: 2.4rem;
   }
   .shop-photo-grid {
     grid-template-columns: 1fr;
@@ -1248,7 +1188,7 @@ footer nav {
     grid-column: auto;
   }
   .estimate-progress {
-    font-size: 10px;
+    font-size: 12px;
     gap: 8px;
   }
   .testimonial figcaption {
@@ -1272,5 +1212,81 @@ fieldset {
 @media (max-width: 440px) {
   .estimate-progress {
     font-size: 12px;
+  }
+}
+
+.hero .wrap {
+  min-height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-block: 96px;
+}
+.hero-copy {
+  max-width: 800px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: clamp(2.8rem, 5vw, 4.5rem);
+  line-height: 1.08;
+  margin: 0 auto 28px;
+  font-weight: 750;
+}
+.hero-copy > p {
+  max-width: 550px;
+  margin: 0 auto;
+  font-size: 18px;
+  line-height: 1.7;
+  color: #dedede;
+}
+.hero .actions {
+  justify-content: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+.hero .btn {
+  min-height: 54px;
+  padding-inline: 30px;
+  font-size: 15px;
+}
+.hero .btn.outline {
+  border-color: #797979;
+}
+.hero .btn.outline:hover {
+  border-color: #fff;
+}
+@media (max-width: 720px) {
+  .hero .wrap {
+    min-height: 480px;
+    padding-block: 72px;
+  }
+  .hero h1 {
+    font-size: clamp(2.55rem, 9vw, 3.8rem);
+  }
+  .hero-copy > p {
+    font-size: 16px;
+    max-width: 430px;
+  }
+  .hero .actions {
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .hero .btn {
+    padding-inline: 24px;
+  }
+  .estimate-layout {
+    gap: 36px;
+  }
+}
+@media (max-width: 440px) {
+  .hero .wrap {
+    min-height: 510px;
+    padding-block: 64px;
+  }
+  .hero .actions {
+    flex-direction: column;
+  }
+  .hero .btn {
+    width: min(100%, 290px);
   }
 }

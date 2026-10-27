@@ -180,7 +180,7 @@ header {
   display: flex;
   gap: 24px;
   align-items: center;
-  margin-left: auto;
+  margin: 0;
   font-size: 13px;
   white-space: nowrap;
 }
@@ -929,6 +929,18 @@ footer nav {
 .skip:focus {
   top: 16px;
 }
+@media (min-width: 901px) {
+  .nav {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  }
+  .navlinks {
+    justify-content: center;
+  }
+  .nav > .btn {
+    justify-self: end;
+  }
+}
 @media (max-width: 1120px) {
   .wrap {
     padding-inline: 32px;
@@ -988,6 +1000,7 @@ footer nav {
   }
   .navlinks a {
     padding: 14px 0;
+    text-align: center;
   }
   .navlinks.open {
     display: flex;

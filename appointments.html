@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="Choose your preferred day and time. We’ll contact you to confirm availability before your visit."
+    />
+    <meta name="theme-color" content="#171717" />
+    <title>Request an appointment | Botticello Auto Repair</title>
+    <script type="module" crossorigin src="./assets/appointments-9M6ivAAW.js"></script>
+    <link rel="modulepreload" crossorigin href="./assets/site-BQ6QL7W7.js">
+    <link rel="modulepreload" crossorigin href="./assets/config-sWICKlF7.js">
+    <link rel="stylesheet" crossorigin href="./assets/site-D1zxSX2M.css">
+  </head>
+  <body>
+    <div data-header>
+      <a href="#main" class="skip">Skip to content</a>
+      <header>
+        <div class="nav wrap">
+          <a
+            class="brand-link"
+            href="index.html"
+            aria-label="Botticello Auto Repair home"
+            ><img
+              src="./assets/botticello-logo-Dur5dyHo.webp"
+              width="1000"
+              height="334"
+              alt="Botticello Auto Repair"
+          /></a>
+          <nav class="navlinks" id="navigation" aria-label="Main navigation">
+            <a href="services.html">Services</a
+            ><a href="contact.html">Visit the shop</a
+            ><a href="index.html#estimate">Online estimate</a>
+          </nav>
+          <a
+            class="btn small"
+            href="appointments.html"
+            aria-label="Book an appointment"
+            ><span class="booking-full">Book an appointment</span
+            ><span class="booking-short" aria-hidden="true">Book</span></a
+          ><button
+            class="menu"
+            aria-controls="navigation"
+            aria-expanded="false"
+          >
+            Menu
+          </button>
+        </div>
+      </header>
+    </div>
+    <main id="main">
+      <section class="pagehead">
+        <div class="wrap">
+          <h1>Book an appointment</h1>
+          <p>
+            Choose your preferred day and time. We’ll contact you to confirm
+            availability before your visit.
+          </p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="wrap form-layout">
+          <div>
+            <div class="progress" aria-label="Form progress">
+              <span class="active">Vehicle</span><span>Contact</span
+              ><span>Review</span>
+            </div>
+            <form id="request-form" data-kind="appointment">
+              <div class="hp" aria-hidden="true">
+                <label
+                  >Website<input
+                    name="website"
+                    tabindex="-1"
+                    autocomplete="off"
+                /></label>
+              </div>
+              <fieldset data-step="0">
+                <legend>What are you driving?</legend>
+                <div class="form-grid">
+                  <label class="full"
+                    >Year, make & model<input
+                      name="vehicle"
+                      maxlength="150"
+                      placeholder="e.g. 2018 Ford F-150"
+                      required
+                      autocomplete="off" /></label
+                  ><label
+                    >Vehicle class<select name="duty">
+                      <option value="light">
+                        Light duty · car, SUV, pickup
+                      </option>
+                      <option value="medium">
+                        Medium duty · work van, truck
+                      </option>
+                      <option value="heavy">
+                        Heavy duty · commercial truck
+                      </option>
+                    </select></label
+                  ><label
+                    >What can we help with?<select name="service" required>
+                      <option value="">Select a service</option>
+                      <option>Maintenance</option>
+                      <option>Diagnostics</option>
+                      <option>Brakes</option>
+                      <option>Tires & suspension</option>
+                      <option>Engine</option>
+                      <option>Transmission</option>
+                      <option>Other / not sure</option>
+                    </select></label
+                  ><label class="full"
+                    >Tell us what’s going on<textarea
+                      name="description"
+                      maxlength="4000"
+                      placeholder="What have you noticed? When does it happen?"
+                    ></textarea></label
+                  ><label
+                    >Preferred date<input
+                      type="date"
+                      name="preferredDate"
+                      required
+                    /><small
+                      >Monday–Friday. Up to six months ahead.</small
+                    ></label
+                  ><label
+                    >Preferred time<select name="preferredTime" required>
+                      <option value="">Choose a time</option>
+                      <option value="morning">Morning · 8 a.m.–12 p.m.</option>
+                      <option value="afternoon">Afternoon · 12–5 p.m.</option>
+                    </select></label
+                  ><label class="full"
+                    >Photos (optional)<input
+                      type="file"
+                      id="photos"
+                      accept="image/jpeg,image/png,image/webp"
+                      multiple
+                    /><small
+                      >Up to 6 photos. JPEG, PNG, or WebP. Maximum 8 MB
+                      each.</small
+                    ></label
+                  >
+                  <div class="photo-previews full" id="photo-previews"></div>
+                </div>
+              </fieldset>
+              <fieldset data-step="1" hidden>
+                <legend>How can we reach you?</legend>
+                <div class="form-grid">
+                  <label class="full"
+                    >Full name<input
+                      name="name"
+                      autocomplete="name"
+                      maxlength="100"
+                      required /></label
+                  ><label
+                    >Email<input
+                      name="email"
+                      type="email"
+                      autocomplete="email"
+                      maxlength="200"
+                      required /></label
+                  ><label
+                    >Phone number<input
+                      name="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      maxlength="30"
+                      required /></label
+                  ><label class="check full"
+                    ><input name="consent" type="checkbox" required /><span
+                      >I agree that Botticello Auto Repair may contact me about
+                      this request. I have read the
+                      <a href="privacy.html" target="_blank">privacy notice</a
+                      >.</span
+                    ></label
+                  >
+                </div>
+              </fieldset>
+              <fieldset data-step="2" hidden>
+                <legend>Everything look right?</legend>
+                <div class="review" id="review"></div>
+                <p class="hint" style="margin-top: 18px">
+                  This is an appointment request. The shop will contact you to
+                  confirm your date and time. Submitting this form does not
+                  authorize repair work. See our
+                  <a href="terms.html" target="_blank" rel="noopener"
+                    >terms of use</a
+                  >.
+                </p>
+              </fieldset>
+              <div id="form-error" class="error" role="alert" hidden></div>
+              <div class="form-actions">
+                <button type="button" class="btn outline" id="back" hidden>
+                  Back</button
+                ><button type="button" class="btn" id="next">Continue</button
+                ><button type="submit" class="btn" id="submit" hidden>
+                  Send request
+                </button>
+              </div>
+            </form>
+            <div id="success" class="success" tabindex="-1" hidden></div>
+          </div>
+          <aside class="form-aside">
+            <h3>Questions about service?</h3>
+            <p>
+              Share the symptoms, any dashboard warning lights, and the work you
+              have in mind.
+            </p>
+            <p>Prefer to talk it through?</p>
+            <a href="tel:+18609535622">860-953-5622</a>
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 24px 0" />
+            <p>
+              Monday–Friday<br />8:00 a.m.–5:00 p.m.<br /><br />210 South
+              Street<br />West Hartford, CT 06110
+            </p>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <div data-footer>
+      <footer>
+        <div class="wrap">
+          <div class="footer-top">
+            <a
+              class="brand-link"
+              href="index.html"
+              aria-label="Botticello Auto Repair home"
+              ><img
+                src="./assets/botticello-logo-Dur5dyHo.webp"
+                width="1000"
+                height="334"
+                alt="Botticello Auto Repair"
+            /></a>
+            <nav aria-label="Footer">
+              <a href="services.html">Services</a
+              ><a href="appointments.html">Book an appointment</a
+              ><a href="estimate.html">Online estimate</a
+              ><a href="contact.html">Contact</a
+              ><a href="landing-page.html">Quick links</a>
+            </nav>
+          </div>
+          <div class="footer-bottom">
+            <p>
+              © <span data-year>2026</span> Botticello Auto Repair. 210 South
+              Street, West Hartford, CT 06110
+            </p>
+            <nav class="legal-links" aria-label="Legal and accessibility">
+              <a href="privacy.html">Privacy policy</a
+              ><a href="terms.html">Terms of use</a
+              ><a href="disclosures.html">FTC disclosures</a
+              ><a href="accessibility.html">Accessibility</a>
+            </nav>
+            <a class="site-credit" href="https://reimagebs.com/"
+              >Powered by Re-Image Business Solution</a
+            >
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

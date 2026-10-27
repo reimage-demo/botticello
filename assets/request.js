@@ -1,4 +1,4 @@
-import { call } from "./config.js";
+import { call, uploadPhoto } from "./config.js";
 const form = document.querySelector("#request-form"),
   steps = [...form.querySelectorAll("[data-step]")],
   next = document.querySelector("#next"),
@@ -170,18 +170,7 @@ form.addEventListener("submit", async (e) => {
     for (let i = 0; i < files.length; i++) {
       if (uploaded.has(i)) continue;
       submit.textContent = `Uploading photo ${i + 1} of ${files.length}…`;
-      const url = await call("mutation", "requests:uploadUrl", request);
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": files[i].type },
-        body: files[i],
-      });
-      if (!response.ok)
-        throw new Error(
-          "A photo did not upload. Retry to finish your request.",
-        );
-      const { storageId } = await response.json();
-      await call("mutation", "requests:attach", { ...request, storageId });
+      await uploadPhoto(request, files[i], String(i));
       uploaded.add(i);
     }
     const result = await call("mutation", "requests:finish", request);

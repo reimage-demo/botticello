@@ -9,12 +9,6 @@ export const requestStatus = v.union(
   v.literal("completed"),
   v.literal("cancelled"),
 );
-export const listingStatus = v.union(
-  v.literal("draft"),
-  v.literal("available"),
-  v.literal("sold"),
-  v.literal("archived"),
-);
 export const requestFields = {
   kind: v.union(v.literal("estimate"), v.literal("appointment")),
   name: v.string(),
@@ -40,15 +34,6 @@ export const requestFields = {
   preferredDate: v.optional(v.string()),
   preferredTime: v.optional(v.string()),
 };
-export const listingFields = {
-  year: v.number(),
-  make: v.string(),
-  model: v.string(),
-  price: v.number(),
-  mileage: v.number(),
-  description: v.string(),
-  status: listingStatus,
-};
 export default defineSchema({
   ...authTables,
   admins: defineTable({
@@ -56,26 +41,49 @@ export default defineSchema({
     email: v.string(),
     active: v.boolean(),
   }).index("by_user", ["userId"]),
-  requests: defineTable({
-    ...requestFields,
-    status: requestStatus,
-    submissionKey: v.string(),
-    submitted: v.boolean(),
-    photos: v.array(v.id("_storage")),
-    uploadCount: v.number(),
-    notes: v.array(v.object({ text: v.string(), at: v.number() })),
-    quoteMin: v.optional(v.number()),
-    quoteMax: v.optional(v.number()),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  })
+  requests: defineTable(
+    v.union(
+      v.object({
+        encrypted: v.string(),
+        keyHash: v.string(),
+        emailHash: v.string(),
+        status: requestStatus,
+        submitted: v.boolean(),
+        photos: v.array(
+          v.object({
+            storageId: v.id("_storage"),
+            slot: v.string(),
+            contentType: v.string(),
+          }),
+        ),
+        uploadCount: v.number(),
+        createdAt: v.number(),
+        updatedAt: v.number(),
+      }),
+      // Temporary migration compatibility. Public functions never write this shape.
+      v.object({
+        ...requestFields,
+        status: requestStatus,
+        submissionKey: v.string(),
+        submitted: v.boolean(),
+        photos: v.array(v.id("_storage")),
+        uploadCount: v.number(),
+        notes: v.array(v.object({ text: v.string(), at: v.number() })),
+        quoteMin: v.optional(v.number()),
+        quoteMax: v.optional(v.number()),
+        createdAt: v.number(),
+        updatedAt: v.number(),
+      }),
+    ),
+  )
     .index("by_key", ["submissionKey"])
     .index("by_email", ["email"])
+    .index("by_key_hash", ["keyHash"])
+    .index("by_email_hash", ["emailHash"])
     .index("by_submitted", ["submitted"]),
-  inventory: defineTable({
-    ...listingFields,
-    photos: v.array(v.id("_storage")),
-    createdAt: v.number(),
-    updatedAt: v.number(),
-  }).index("by_status", ["status"]),
+  loginAttempts: defineTable({
+    accountId: v.id("authAccounts"),
+    failures: v.number(),
+    lockedUntil: v.number(),
+  }).index("by_account", ["accountId"]),
 });

@@ -1,7 +1,26 @@
-import { mutation, query } from "./_generated/server";
+import {
+  mutation,
+  query,
+  internalMutation,
+  internalQuery,
+} from "./_generated/server";
 import { v } from "convex/values";
 import { requestFields, requestStatus } from "./schema";
-import { requireAdmin, bounded, validatePhotos } from "./lib/admin";
+import { requireAdmin, bounded } from "./lib/admin";
+import { seal, open, fingerprint } from "./lib/crypto";
+import type { Infer } from "convex/values";
+import type { Doc } from "./_generated/dataModel";
+const requestValidator = v.object(requestFields);
+export type CustomerData = Infer<typeof requestValidator> & {
+  notes: { text: string; at: number }[];
+  quoteMin?: number;
+  quoteMax?: number;
+};
+export async function customerData(r: Doc<"requests">) {
+  if (!("encrypted" in r))
+    throw new Error("Customer data migration is required.");
+  return open<CustomerData>(r.encrypted, `request:${r._id}`);
+}
 const access = { id: v.id("requests"), submissionKey: v.string() };
 export const start = mutation({
   args: {
@@ -13,9 +32,10 @@ export const start = mutation({
     if (args.website) throw new Error("Unable to submit request.");
     if (!/^[a-zA-Z0-9_-]{24,100}$/.test(args.submissionKey))
       throw new Error("Invalid request key.");
+    const keyHash = await fingerprint(args.submissionKey, "submission");
     const prior = await ctx.db
       .query("requests")
-      .withIndex("by_key", (q) => q.eq("submissionKey", args.submissionKey))
+      .withIndex("by_key_hash", (q) => q.eq("keyHash", keyHash))
       .unique();
     if (prior) return prior._id;
     const name = bounded(args.name, "Name", 100),
@@ -54,9 +74,10 @@ export const start = mutation({
       );
     if (args.mileage && !/^\d{1,9}$/.test(args.mileage))
       throw new Error("Enter a valid mileage.");
+    const emailHash = await fingerprint(email, "email");
     const recent = await ctx.db
       .query("requests")
-      .withIndex("by_email", (q) => q.eq("email", email))
+      .withIndex("by_email_hash", (q) => q.eq("emailHash", emailHash))
       .order("desc")
       .take(6);
     if (recent.filter((r) => r.createdAt > Date.now() - 3600000).length >= 5)
@@ -82,54 +103,99 @@ export const start = mutation({
       if (!["morning", "afternoon"].includes(args.preferredTime ?? ""))
         throw new Error("Choose a preferred time.");
     }
-    const { website, ...data } = args;
-    return await ctx.db.insert("requests", {
-      ...data,
-      name,
-      email,
-      phone,
+    const { website, submissionKey, ...data } = args;
+    const id = await ctx.db.insert("requests", {
+      encrypted: "pending",
+      keyHash,
+      emailHash,
       status: "new",
       submitted: false,
       photos: [],
       uploadCount: 0,
-      notes: [],
       createdAt: Date.now(),
       updatedAt: Date.now(),
     });
+    await ctx.db.patch(id, {
+      encrypted: await seal(
+        { ...data, name, email, phone, notes: [] },
+        `request:${id}`,
+      ),
+    });
+    return id;
   },
 });
-export const uploadUrl = mutation({
-  args: access,
+export const reservePhoto = internalMutation({
+  args: { ...access, slot: v.string() },
   handler: async (ctx, args) => {
     const r = await ctx.db.get(args.id);
     if (
       !r ||
-      r.submissionKey !== args.submissionKey ||
+      !("encrypted" in r) ||
+      r.keyHash !== (await fingerprint(args.submissionKey, "submission")) ||
       r.submitted ||
       r.createdAt < Date.now() - 86400000 ||
-      r.uploadCount >= 12
+      !/^[-a-zA-Z0-9]{1,64}$/.test(args.slot)
     )
       throw new Error("Photo upload is unavailable.");
+    const existing = r.photos.find((p) => p.slot === args.slot);
+    if (existing) return { existing: true };
+    if (r.uploadCount >= 12 || r.photos.length >= 6)
+      throw new Error("Photo upload is unavailable.");
     await ctx.db.patch(r._id, { uploadCount: r.uploadCount + 1 });
-    return ctx.storage.generateUploadUrl();
+    return { existing: false };
   },
 });
-export const attach = mutation({
-  args: { ...access, storageId: v.id("_storage") },
+export const commitPhoto = internalMutation({
+  args: {
+    ...access,
+    slot: v.string(),
+    storageId: v.id("_storage"),
+    contentType: v.string(),
+  },
   handler: async (ctx, args) => {
     const r = await ctx.db.get(args.id);
-    if (!r || r.submissionKey !== args.submissionKey || r.submitted)
-      throw new Error("Request not found.");
-    if (r.photos.includes(args.storageId)) return;
-    await validatePhotos(ctx, [...r.photos, args.storageId]);
-    await ctx.db.patch(r._id, { photos: [...r.photos, args.storageId] });
+    if (
+      !r ||
+      !("encrypted" in r) ||
+      r.keyHash !== (await fingerprint(args.submissionKey, "submission")) ||
+      r.submitted
+    )
+      throw new Error("Photo upload is unavailable.");
+    if (r.photos.some((p) => p.slot === args.slot)) return false;
+    if (r.photos.length >= 6) throw new Error("Use up to six photos.");
+    await ctx.db.patch(r._id, {
+      photos: [
+        ...r.photos,
+        {
+          storageId: args.storageId,
+          slot: args.slot,
+          contentType: args.contentType,
+        },
+      ],
+    });
+    return true;
+  },
+});
+export const photoAccess = internalQuery({
+  args: { id: v.id("requests"), slot: v.string() },
+  handler: async (ctx, { id, slot }) => {
+    await requireAdmin(ctx);
+    const r = await ctx.db.get(id);
+    if (!r || !("encrypted" in r)) throw new Error("Photo not found.");
+    const photo = r.photos.find((p) => p.slot === slot);
+    if (!photo) throw new Error("Photo not found.");
+    return photo;
   },
 });
 export const finish = mutation({
   args: access,
   handler: async (ctx, args) => {
     const r = await ctx.db.get(args.id);
-    if (!r || r.submissionKey !== args.submissionKey)
+    if (
+      !r ||
+      !("encrypted" in r) ||
+      r.keyHash !== (await fingerprint(args.submissionKey, "submission"))
+    )
       throw new Error("Request not found.");
     await ctx.db.patch(r._id, { submitted: true, updatedAt: Date.now() });
     return { reference: r._id.slice(-8).toUpperCase() };
@@ -145,11 +211,14 @@ export const list = query({
       .order("desc")
       .take(500);
     return Promise.all(
-      rows.map(async ({ submissionKey, ...r }) => ({
-        ...r,
-        photoUrls: await Promise.all(
-          r.photos.map((id) => ctx.storage.getUrl(id)),
-        ),
+      rows.map(async (r) => ({
+        _id: r._id,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+        status: r.status,
+        ...(await customerData(r)),
+        photoRefs:
+          "encrypted" in r ? r.photos.map((p) => ({ slot: p.slot })) : [],
       })),
     );
   },
@@ -165,7 +234,8 @@ export const update = mutation({
   handler: async (ctx, args) => {
     await requireAdmin(ctx);
     const r = await ctx.db.get(args.id);
-    if (!r) throw new Error("Request not found.");
+    if (!r || !("encrypted" in r)) throw new Error("Request not found.");
+    const data = await customerData(r);
     if (
       args.quoteMin !== undefined &&
       (!Number.isFinite(args.quoteMin) || args.quoteMin < 0)
@@ -174,15 +244,21 @@ export const update = mutation({
     if (
       args.quoteMax !== undefined &&
       (!Number.isFinite(args.quoteMax) ||
-        args.quoteMax < (args.quoteMin ?? r.quoteMin ?? 0))
+        args.quoteMax < (args.quoteMin ?? data.quoteMin ?? 0))
     )
       throw new Error("Maximum must be at least the minimum.");
-    const { id, note, ...patch } = args;
-    await ctx.db.patch(id, {
-      ...patch,
+    const { id, note, status, quoteMin, quoteMax } = args;
+    const next = {
+      ...data,
+      ...(quoteMin !== undefined ? { quoteMin } : {}),
+      ...(quoteMax !== undefined ? { quoteMax } : {}),
       notes: note?.trim()
-        ? [...r.notes, { text: bounded(note, "Note", 2000), at: Date.now() }]
-        : r.notes,
+        ? [...data.notes, { text: bounded(note, "Note", 2000), at: Date.now() }]
+        : data.notes,
+    };
+    await ctx.db.patch(id, {
+      status,
+      encrypted: await seal(next, `request:${id}`),
       updatedAt: Date.now(),
     });
   },

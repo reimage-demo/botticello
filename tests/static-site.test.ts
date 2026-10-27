@@ -8,7 +8,6 @@ const pages = [
   "services",
   "estimate",
   "appointments",
-  "inventory",
   "contact",
   "privacy",
   "terms",
@@ -36,15 +35,15 @@ describe("plain HTTP / Live Server compatibility", () => {
       [
         "--input-type=module",
         "-e",
-        `const {CONVEX_URL,call}=await import('./assets/config.js');let request;globalThis.fetch=async(url,options)=>{request={url,body:JSON.parse(options.body)};return {ok:true,json:async()=>({status:'success',value:[]})}};await call('query','inventory:available');process.stdout.write(JSON.stringify({CONVEX_URL,request}));`,
+        `const {CONVEX_URL,call}=await import('./assets/config.js');let request;globalThis.fetch=async(url,options)=>{request={url,body:JSON.parse(options.body)};return {ok:true,json:async()=>({status:'success',value:[]})}};await call('mutation','requests:start');process.stdout.write(JSON.stringify({CONVEX_URL,request}));`,
       ],
       { encoding: "utf8" },
     );
     expect(JSON.parse(result)).toEqual({
       CONVEX_URL: "https://sincere-turtle-299.convex.cloud",
       request: {
-        url: "https://sincere-turtle-299.convex.cloud/api/query",
-        body: { path: "inventory:available", args: {}, format: "json" },
+        url: "https://sincere-turtle-299.convex.cloud/api/mutation",
+        body: { path: "requests:start", args: {}, format: "json" },
       },
     });
   });

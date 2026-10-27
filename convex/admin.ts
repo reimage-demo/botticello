@@ -1,13 +1,23 @@
 import { query, internalMutation, internalAction } from "./_generated/server";
 import { internal } from "./_generated/api";
-import { createAccount } from "@convex-dev/auth/server";
+import { createAccount, getAuthSessionId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { requireAdmin } from "./lib/admin";
 export const me = query({
   args: {},
   handler: async (ctx) => {
-    await requireAdmin(ctx);
-    return true;
+    try {
+      await requireAdmin(ctx);
+    } catch {
+      return null;
+    }
+    const session = await ctx.db.get((await getAuthSessionId(ctx))!);
+    return {
+      expiresAt: Math.min(
+        session!.expirationTime,
+        session!._creationTime + 30 * 60 * 1000,
+      ),
+    };
   },
 });
 export const grant = internalMutation({

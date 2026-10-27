@@ -1,7 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { convexTest } from "convex-test";
 import schema from "../convex/schema";
-import { api } from "../convex/_generated/api";
+import { api, internal } from "../convex/_generated/api";
+beforeAll(() => {
+  process.env.CUSTOMER_DATA_KEY = btoa("d".repeat(32));
+  process.env.CUSTOMER_INDEX_KEY = btoa("i".repeat(32));
+  process.env.ADMIN_PASSWORD_PEPPER = btoa("p".repeat(32));
+});
 const modules = import.meta.glob("../convex/**/*.ts");
 const payload = {
   kind: "estimate" as const,
@@ -22,20 +27,18 @@ async function admin(t: ReturnType<typeof convexTest>) {
       email: "staff@example.com",
       active: true,
     });
-    return id;
+    const sessionId = await ctx.db.insert("authSessions", {
+      userId: id,
+      expirationTime: Date.now() + 30 * 60 * 1000,
+    });
+    return { id, sessionId };
   });
-  return t.withIdentity({ subject: `${userId}|testsession` });
+  return t.withIdentity({ subject: `${userId.id}|${userId.sessionId}` });
 }
 describe("shop access and workflow", () => {
-  it("blocks anonymous and unapproved access to customer records and inventory changes", async () => {
+  it("blocks anonymous and unapproved access to customer records", async () => {
     const t = convexTest(schema, modules);
     await expect(t.query(api.requests.list, {})).rejects.toThrow(
-      "Sign in required",
-    );
-    await expect(t.query(api.inventory.list, {})).rejects.toThrow(
-      "Sign in required",
-    );
-    await expect(t.mutation(api.inventory.uploadUrl, {})).rejects.toThrow(
       "Sign in required",
     );
     const id = await t.run((ctx) =>
@@ -73,6 +76,12 @@ describe("shop access and workflow", () => {
       note: "Call to schedule inspection",
     });
     const updated = (await staff.query(api.requests.list, {}))[0];
+    const stored = await t.run((ctx) => ctx.db.get(id));
+    expect(JSON.stringify(stored)).not.toContain(payload.name);
+    expect(JSON.stringify(stored)).not.toContain(payload.email);
+    expect(JSON.stringify(stored)).not.toContain(payload.phone);
+    expect(JSON.stringify(stored)).not.toContain("Call to schedule inspection");
+    expect(stored).not.toHaveProperty("submissionKey");
     expect(updated.quoteMin).toBe(150);
     expect(updated.notes[0].text).toContain("inspection");
     await expect(
@@ -109,57 +118,84 @@ describe("shop access and workflow", () => {
       }),
     ).rejects.toThrow("Too many");
   });
-  it("limits uploads and accepts only supported image files", async () => {
-    const t = convexTest(schema, modules);
-    const id = await t.mutation(api.requests.start, payload);
-    const access = { id, submissionKey: payload.submissionKey };
-    const bad = await t.run((ctx) =>
-      ctx.storage.store(new Blob(["test"], { type: "text/plain" })),
-    );
-    await expect(
-      t.mutation(api.requests.attach, { ...access, storageId: bad }),
-    ).rejects.toThrow("Photos must");
-    const image = await t.run((ctx) =>
-      ctx.storage.store(new Blob(["test"], { type: "image/png" })),
-    );
-    await t.mutation(api.requests.attach, { ...access, storageId: image });
-    await t.mutation(api.requests.attach, { ...access, storageId: image });
-    expect(await t.run(async (ctx) => (await ctx.db.get(id))!.photos)).toEqual([
-      image,
-    ]);
-    for (let i = 0; i < 12; i++)
-      await t.mutation(api.requests.uploadUrl, access);
-    await expect(t.mutation(api.requests.uploadUrl, access)).rejects.toThrow(
-      "unavailable",
-    );
-    await t.mutation(api.requests.finish, access);
-    await expect(
-      t.mutation(api.requests.attach, { ...access, storageId: image }),
-    ).rejects.toThrow("Request not found");
-  });
-  it("publishes only available vehicles and removes sold vehicles from public results", async () => {
+  it("encrypts uploaded photos and requires an active admin session to read them", async () => {
     const t = convexTest(schema, modules),
       staff = await admin(t);
-    const data = {
-      year: 2020,
-      make: "Ford",
-      model: "Transit",
-      price: 22000,
-      mileage: 60000,
-      description: "Test listing",
-      status: "draft" as const,
-      photos: [],
+    const id = await t.mutation(api.requests.start, payload);
+    const bytes = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 1, 2, 3, 4]);
+    const headers = {
+      "Content-Type": "image/png",
+      "X-Request-Id": id,
+      "X-Submission-Key": payload.submissionKey,
+      "X-Photo-Slot": "0",
     };
-    const id = await staff.mutation(api.inventory.save, data);
-    expect(await t.query(api.inventory.available, {})).toHaveLength(0);
-    await staff.mutation(api.inventory.save, {
-      ...data,
-      id,
-      status: "available",
+    expect(
+      (
+        await t.fetch("/customer-photo", {
+          method: "POST",
+          headers,
+          body: bytes,
+        })
+      ).status,
+    ).toBe(200);
+    expect(
+      (
+        await t.fetch("/customer-photo", {
+          method: "POST",
+          headers,
+          body: bytes,
+        })
+      ).status,
+    ).toBe(200);
+    const row = await t.run((ctx) => ctx.db.get(id));
+    expect(row!.photos).toHaveLength(1);
+    if (!row || !("encrypted" in row)) throw Error("Not encrypted");
+    const stored = await t.run(async (ctx) => {
+      const blob = await ctx.storage.get(row.photos[0].storageId);
+      return { type: blob!.type, bytes: await blob!.arrayBuffer() };
     });
-    expect(await t.query(api.inventory.available, {})).toHaveLength(1);
-    await staff.mutation(api.inventory.save, { ...data, id, status: "sold" });
-    expect(await t.query(api.inventory.available, {})).toHaveLength(0);
+    expect(stored.type).toBe("application/octet-stream");
+    expect(new Uint8Array(stored.bytes)).not.toEqual(bytes);
+    expect((await t.fetch(`/admin-photo?id=${id}&slot=0`)).status).toBe(403);
+    const image = await staff.fetch(`/admin-photo?id=${id}&slot=0`);
+    expect(image.status).toBe(200);
+    expect(image.headers.get("Cache-Control")).toBe("no-store");
+    expect(new Uint8Array(await image.arrayBuffer())).toEqual(bytes);
+    expect(
+      (
+        await t.fetch("/customer-photo", {
+          method: "POST",
+          headers: {
+            ...headers,
+            "X-Submission-Key": "wrong",
+            "X-Photo-Slot": "1",
+          },
+          body: bytes,
+        })
+      ).status,
+    ).toBe(400);
+    expect(
+      (
+        await t.fetch("/customer-photo", {
+          method: "POST",
+          headers: { ...headers, "X-Photo-Slot": "2" },
+          body: new Uint8Array([1, 2, 3]),
+        })
+      ).status,
+    ).toBe(400);
+    for (let i = 0; i < 10; i++)
+      await t.mutation(internal.requests.reservePhoto, {
+        id,
+        submissionKey: payload.submissionKey,
+        slot: `retry-${i}`,
+      });
+    await expect(
+      t.mutation(internal.requests.reservePhoto, {
+        id,
+        submissionKey: payload.submissionKey,
+        slot: "last",
+      }),
+    ).rejects.toThrow("unavailable");
   });
 });
 

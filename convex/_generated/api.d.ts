@@ -11,9 +11,13 @@
 import type * as admin from "../admin.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
-import type * as inventory from "../inventory.js";
 import type * as lib_admin from "../lib/admin.js";
+import type * as lib_crypto from "../lib/crypto.js";
+import type * as lib_password from "../lib/password.js";
+import type * as login from "../login.js";
+import type * as photos from "../photos.js";
 import type * as requests from "../requests.js";
+import type * as securityMigration from "../securityMigration.js";
 
 import type {
   ApiFromModules,
@@ -25,9 +29,13 @@ declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   auth: typeof auth;
   http: typeof http;
-  inventory: typeof inventory;
   "lib/admin": typeof lib_admin;
+  "lib/crypto": typeof lib_crypto;
+  "lib/password": typeof lib_password;
+  login: typeof login;
+  photos: typeof photos;
   requests: typeof requests;
+  securityMigration: typeof securityMigration;
 }>;
 
 /**

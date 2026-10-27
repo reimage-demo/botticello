@@ -13,10 +13,9 @@ try {
   client.setAuth(result.tokens.token);
   if (!(await client.query(anyApi.admin.me, {}))) throw new Error("No access");
   await client.query(anyApi.requests.list, {});
-  await client.query(anyApi.inventory.list, {});
   await client.action(anyApi.auth.signOut, {});
   console.log(
-    "Production login, admin authorization, requests, inventory, and sign-out verified.",
+    "Production login, admin authorization, requests, and sign-out verified.",
   );
 } catch {
   console.error("Production login verification failed.");

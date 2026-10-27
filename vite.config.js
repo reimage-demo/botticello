@@ -9,7 +9,6 @@ export default defineConfig({
           "services",
           "estimate",
           "appointments",
-          "inventory",
           "contact",
           "privacy",
           "terms",

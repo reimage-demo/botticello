@@ -1,4 +1,4 @@
-import { getAuthUserId } from "@convex-dev/auth/server";
+import { getAuthSessionId, getAuthUserId } from "@convex-dev/auth/server";
 import type { QueryCtx, MutationCtx } from "../_generated/server";
 export async function requireAdmin(ctx: QueryCtx | MutationCtx) {
   const id = await getAuthUserId(ctx);
@@ -8,6 +8,15 @@ export async function requireAdmin(ctx: QueryCtx | MutationCtx) {
     .withIndex("by_user", (q) => q.eq("userId", id))
     .unique();
   if (!admin?.active) throw new Error("Administrator access required.");
+  const sessionId = await getAuthSessionId(ctx);
+  const session = sessionId ? await ctx.db.get(sessionId) : null;
+  if (
+    !session ||
+    session.userId !== id ||
+    Math.min(session.expirationTime, session._creationTime + 30 * 60 * 1000) <=
+      Date.now()
+  )
+    throw new Error("Session expired. Sign in again.");
   return id;
 }
 export function bounded(value: string, label: string, max = 200) {

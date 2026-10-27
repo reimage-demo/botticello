@@ -1,7 +1,10 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from "vitest";
-const { call } = vi.hoisted(() => ({ call: vi.fn() }));
-vi.mock("../assets/config.js", () => ({ call }));
+const { call, uploadPhoto } = vi.hoisted(() => ({
+  call: vi.fn(),
+  uploadPhoto: vi.fn(),
+}));
+vi.mock("../assets/config.js", () => ({ call, uploadPhoto }));
 const field = (name: string) =>
   document.querySelector(`[name="${name}"]`) as HTMLInputElement;
 const click = (id: string) =>
@@ -41,6 +44,7 @@ function toReview() {
 beforeEach(async () => {
   vi.resetModules();
   call.mockReset();
+  uploadPhoto.mockReset();
   document.body.innerHTML = "<div data-estimate-form></div>";
   Element.prototype.scrollIntoView = vi.fn();
   URL.createObjectURL = vi.fn(() => "blob:preview");
@@ -131,19 +135,14 @@ describe("estimate form in the browser DOM", () => {
       value: [new File(["photo"], "damage.jpg", { type: "image/jpeg" })],
     });
     input.dispatchEvent(new Event("change"));
-    let attachCount = 0;
+    let finishCount = 0;
+    uploadPhoto.mockResolvedValue(undefined);
     call.mockImplementation(async (_kind: string, fn: string) => {
       if (fn === "requests:start") return "request-123";
-      if (fn === "requests:uploadUrl") return "https://example.test/upload";
-      if (fn === "requests:attach" && attachCount++ === 0)
+      if (fn === "requests:finish" && finishCount++ === 0)
         throw Error("Temporary connection failure");
       if (fn === "requests:finish") return { reference: "ABC123" };
     });
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({ storageId: "photo-123" }),
-    });
-    vi.stubGlobal("fetch", fetchMock);
     click("estimate-send");
     await vi.waitFor(() =>
       expect(document.getElementById("estimate-error")?.textContent).toContain(
@@ -163,7 +162,7 @@ describe("estimate form in the browser DOM", () => {
     expect(
       call.mock.calls.filter((c) => c[1] === "requests:start"),
     ).toHaveLength(1);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(uploadPhoto).toHaveBeenCalledTimes(1);
     expect(
       call.mock.calls.find((c) => c[1] === "requests:start")?.[2],
     ).toMatchObject({

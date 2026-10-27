@@ -1,4 +1,4 @@
-import { call } from "./config.js";
+import { call, uploadPhoto } from "./config.js";
 const mount = document.querySelector("[data-estimate-form]");
 if (mount) {
   mount.innerHTML = `<div class="estimate-progress" aria-label="Estimate request progress"><span aria-current="step">Contact</span><span>Vehicle</span><span>Issue</span><span>Photos & review</span></div>
@@ -230,22 +230,8 @@ if (mount) {
         const state = uploaded.get(i) || {};
         if (state.attached) continue;
         status.textContent = `Uploading photo ${i + 1} of ${files.length}…`;
-        if (!state.storageId) {
-          const url = await call("mutation", "requests:uploadUrl", request),
-            response = await fetch(url, {
-              method: "POST",
-              headers: { "Content-Type": files[i].file.type },
-              body: files[i].file,
-            });
-          if (!response.ok)
-            throw Error("A photo could not upload. Please retry.");
-          state.storageId = (await response.json()).storageId;
-          uploaded.set(i, state);
-        }
-        await call("mutation", "requests:attach", {
-          ...request,
-          storageId: state.storageId,
-        });
+        await uploadPhoto(request, files[i].file, String(i));
+        uploaded.set(i, state);
         state.attached = true;
       }
       const result = await call("mutation", "requests:finish", request);

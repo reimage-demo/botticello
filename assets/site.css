@@ -1624,3 +1624,17 @@ textarea {
     font-size: 13px;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  main > section {
+    transition: opacity 450ms ease;
+  }
+  .scroll-reveal {
+    opacity: 0;
+  }
+}
+@media print {
+  .scroll-reveal {
+    opacity: 1 !important;
+  }
+}

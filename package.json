@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "convex:deploy": "convex deploy",
     "admin:dev": "npm --prefix admin run dev",
-    "admin:build": "npm --prefix admin run build"
+    "admin:build": "npm --prefix admin run build",
+    "deploy:pages": "python3 scripts/deploy-pages.py"
   },
   "dependencies": {
     "@convex-dev/auth": "latest",

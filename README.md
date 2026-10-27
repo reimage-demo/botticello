@@ -31,6 +31,16 @@ Admin credentials are not stored in the source. Public sign-up is disabled. Acco
 
 ## Hosting
 
+The two production frontends are published independently with GitHub Pages, following Lunchbox’s separate-repository setup:
+
+- Public source: https://github.com/reimage-demo/botticello
+- Public site: https://reimage-demo.github.io/botticello/
+- Landing page: https://reimage-demo.github.io/botticello/landing-page.html
+- Admin source: https://github.com/reimage-demo/ADMIN-Botticello
+- Admin portal: https://reimage-demo.github.io/ADMIN-Botticello/
+
+Each repository publishes only the built `dist/` files from its own `gh-pages` branch. Run `npm run deploy:pages` to build and publish. The saved Reimage GitHub login currently lacks workflow permission, so the equivalent Lunchbox-style Actions workflow is prepared at `deployment/github-pages-workflow.yml` for future enablement. The admin build uses `VITE_CONVEX_URL` for the public backend address. Backend secrets remain exclusively in Convex. Vite uses relative asset URLs so both GitHub project paths and future custom domains work.
+
 For each repository, build command: `npm ci && npm run build`; output: `dist`. Set `VITE_CONVEX_URL=https://sincere-turtle-299.convex.cloud` at build time. Publish only the build output, never the source tree. This source push does not switch the business's existing domain or host.
 
 ## Business information and assets
@@ -51,10 +61,10 @@ Admin passwords use PBKDF2-HMAC-SHA-256 (600,000 iterations), unique random salt
 
 Sessions have a hard 30-minute lifetime, short-lived access tokens, and server checks against the current session row on every customer-data operation. The portal clears its customer view at expiration, including on returning from a background tab, and stores auth tokens in sessionStorage. Existing long-lived sessions were revoked during the rollout.
 
-Production-only secrets: CUSTOMER_DATA_KEY, CUSTOMER_INDEX_KEY, ADMIN_PASSWORD_PEPPER. These are separate random 32-byte keys, kept in Convex environment settings, never in frontend bundles or source control. Preserve backups through your secret-management process. Do not replace encryption keys without a versioned migration: old ciphertext cannot be recovered without the old key. ALLOWED_WEB_ORIGINS is a comma-separated list for the public/admin photo HTTP endpoints; add the actual hosting origins before changing hosts. Current defaults include the business domain and local previews.
+Production-only secrets: CUSTOMER_DATA_KEY, CUSTOMER_INDEX_KEY, ADMIN_PASSWORD_PEPPER. These are separate random 32-byte keys, kept in Convex environment settings, never in frontend bundles or source control. Preserve backups through your secret-management process. Do not replace encryption keys without a versioned migration: old ciphertext cannot be recovered without the old key. ALLOWED_WEB_ORIGINS is a comma-separated list for the public/admin photo HTTP endpoints; add the actual hosting origins before changing hosts. Production settings include the business domain, local previews, and https://reimage-demo.github.io.
 
 The internal securityMigration functions support one-record-at-a-time legacy migration and aggregate-only audit results. Existing password verifiers are first sealed with the pepper, then upgraded after a valid login. The production account has completed that upgrade. Migration and provisioning functions are internal, not browser-callable.
 
 There are no vehicle-sales pages, admin controls, or inventory endpoints. Below-the-fold photographs use native lazy loading; the estimate module loads as its section approaches view. Scroll reveals use opacity only and respect reduced-motion preferences. Content remains visible if animation support is unavailable.
 
-The root `landing-page.html` provides a compact, mobile-first shop directory based on the Tuff Cuts layout: location, phone, hours, and call, appointment, estimate, and social actions. The social panel awaits the shop’s verified social profile URL. Font files are distributed under the SIL Open Font License included in `assets/fonts/OFL.txt`.
+The root `landing-page.html` provides a compact, mobile-first shop directory based on the Tuff Cuts layout: location, hours, and call, appointment, estimate, and social actions. The social button remains a placeholder at the owner’s request. Font files are distributed under the SIL Open Font License included in `assets/fonts/OFL.txt`.

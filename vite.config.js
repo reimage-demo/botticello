@@ -6,6 +6,7 @@ export default defineConfig({
       input: Object.fromEntries(
         [
           "index",
+          "landing-page",
           "services",
           "estimate",
           "appointments",

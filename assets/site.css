@@ -55,18 +55,16 @@ legend {
 }
 h1,
 h2 {
-  font-size: clamp(1.85rem, 3vw, 2.75rem);
-  margin-bottom: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   font-weight: 700;
+  margin-bottom: 24px;
 }
 h1 {
   font-size: clamp(2.5rem, 4.6vw, 4.5rem);
-  margin-bottom: 24px;
-  font-weight: 700;
 }
 h2 {
-  font-size: clamp(2.5rem, 4vw, 4rem);
-  margin-bottom: 24px;
+  font-size: clamp(1.75rem, 3vw, 2.75rem);
 }
 h3 {
   font-size: 1.35rem;
@@ -205,7 +203,7 @@ header {
 }
 .visit-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 100px;
   padding-block: 56px;
 }
@@ -331,7 +329,7 @@ header {
 }
 .split {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 64px;
   align-items: center;
 }
@@ -465,7 +463,7 @@ header {
 }
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
 }
 .full {
@@ -791,7 +789,7 @@ button:disabled {
 }
 .shop-photo-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 32px;
 }
 .shop-photo-grid img {
@@ -904,7 +902,7 @@ footer nav {
     gap: 40px;
   }
   .service-card {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .service-action {
     grid-column: 2;
@@ -961,7 +959,7 @@ footer nav {
     gap: 40px;
   }
   .inventory-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .footer-top {
     align-items: flex-start;
@@ -992,7 +990,7 @@ footer nav {
   }
 
   .visit-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
     padding-block: 32px;
   }
@@ -1275,7 +1273,7 @@ fieldset {
 @media (max-width: 1100px) {
   .hero .wrap {
     max-width: 800px;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
     padding-block: 56px;
   }
@@ -1325,5 +1323,232 @@ fieldset {
   }
   .hero-photo {
     height: 160px;
+  }
+}
+
+/* Phone layouts keep every action readable and reachable without horizontal scrolling. */
+.booking-short {
+  display: none;
+}
+.form-grid > *,
+.form-layout > *,
+.estimate-layout > *,
+.hero .wrap > * {
+  min-width: 0;
+}
+input,
+select,
+textarea {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 900px) {
+  .navlinks {
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+@media (max-width: 720px) {
+  .wrap {
+    padding-inline: max(20px, env(safe-area-inset-left))
+      max(20px, env(safe-area-inset-right));
+  }
+  .nav {
+    flex-wrap: nowrap;
+    min-height: 76px;
+    padding-block: 12px;
+  }
+  .menu {
+    min-width: 56px;
+    font-size: 14px;
+  }
+  .hero .wrap {
+    min-height: 0;
+    padding-block: 36px 24px;
+    gap: 20px 16px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 8.8vw, 3.5rem);
+    margin-bottom: 20px;
+  }
+  .hero-copy > p {
+    line-height: 1.6;
+  }
+  .hero .actions {
+    margin-top: 24px;
+  }
+  .hero-photo {
+    height: clamp(140px, 40vw, 200px);
+  }
+  .pagehead h1 {
+    font-size: clamp(2rem, 7.5vw, 2.4rem);
+    overflow-wrap: break-word;
+  }
+  .opening-hours {
+    font-size: 14px;
+  }
+  .opening-hours caption span {
+    font-size: 12px;
+  }
+  .section {
+    padding-block: 44px;
+  }
+  .section-head p,
+  .estimate-intro p,
+  .field-intro,
+  .service-card p,
+  .form-aside p,
+  .vehicle p {
+    font-size: 15px;
+  }
+  label {
+    font-size: 14px;
+  }
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    min-height: 48px;
+  }
+  select {
+    height: 48px;
+  }
+  textarea {
+    min-height: 140px;
+  }
+  .estimate-progress,
+  .progress {
+    font-size: 12px;
+    gap: 8px;
+  }
+  .estimate-progress span,
+  .progress span {
+    min-width: 0;
+  }
+  .transport-needs .check {
+    min-height: 48px;
+    align-items: center;
+    margin: 0;
+    padding-block: 12px;
+  }
+  .check input {
+    width: 22px;
+    height: 22px;
+    min-height: 22px;
+    padding: 0;
+  }
+  .check {
+    font-size: 14px;
+  }
+  .form-actions {
+    gap: 12px;
+  }
+  .form-actions .btn {
+    min-height: 48px;
+    font-size: 14px;
+  }
+  .form-actions .btn:not([hidden]) {
+    flex: 1;
+  }
+  .form-actions #estimate-back,
+  .form-actions #back {
+    flex: 0 0 auto;
+  }
+  .upload-zone input {
+    font-size: 14px;
+  }
+  .upload-zone input::file-selector-button {
+    min-height: 44px;
+  }
+  .estimate-previews button {
+    min-height: 44px;
+    width: 100%;
+    font-size: 14px;
+  }
+  .review,
+  .estimate-review {
+    font-size: 14px;
+  }
+  .review dl,
+  .estimate-review dl {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .review dd,
+  .estimate-review dd {
+    margin-bottom: 12px;
+  }
+  footer nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 4px 20px;
+    font-size: 14px;
+  }
+  footer nav a,
+  .footer-bottom > a,
+  .testimonial figcaption a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .testimonial figcaption {
+    gap: 8px;
+  }
+  .phone-link {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .visit-address .text-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .hours div {
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+  }
+}
+@media (max-width: 600px) {
+  .nav > .brand-link {
+    width: clamp(120px, 36vw, 165px);
+  }
+  .nav {
+    gap: 8px;
+  }
+  .nav > .btn {
+    min-width: 60px;
+    min-height: 44px;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  .booking-full {
+    display: none;
+  }
+  .booking-short {
+    display: inline;
+  }
+  .nav .menu {
+    padding-inline: 12px;
+  }
+  .form-grid,
+  .visit-grid {
+    grid-template-columns: 1fr;
+  }
+  .full {
+    grid-column: auto;
+  }
+  .visit-grid {
+    gap: 24px;
+  }
+  .opening-hours caption span {
+    float: right;
+    margin: 0;
+  }
+  .shop-status {
+    min-height: 0;
   }
 }

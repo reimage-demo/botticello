@@ -11,6 +11,9 @@ const pages = [
   "inventory",
   "contact",
   "privacy",
+  "terms",
+  "disclosures",
+  "accessibility",
 ];
 describe("plain HTTP / Live Server compatibility", () => {
   it.each(pages)(
